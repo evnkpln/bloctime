@@ -1,0 +1,9 @@
+<section class="pomTimer" ng-controller="PomodoroCtrl as pomodoro">
+  <div class="row justify-content-md-center">
+    <div class="col-md-8">
+      <h3>{{ pomodoro.pomTimer.clock }}</h3>
+      <button class="btn" ng-click="pomodoro.pomTimer.toggle()">{{ pomodoro.pomTimer.buttonText}}</button>
+      <button class="btn" ng-click="pomodoro.pomTimer.skipTime(60)">Skip 1 minute</button>
+    </div>
+  </div
+</section>
