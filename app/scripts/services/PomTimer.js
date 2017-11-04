@@ -10,6 +10,7 @@
     */
     const POM_TIME = 25;
     const BREAK_TIME = 5;
+    const LONG_BREAK_TIME = 30;
     /**
     * @desc Remaining time in seconds.
     * @type {Number}
@@ -25,6 +26,11 @@
     * @type {Promise}
     */
     var timerPromise;
+    /**
+    * @desc Pomodoros completed. Resets after 4.
+    * @type {Number}
+    **/
+    var completedPoms = 0;
 
 /* =========================================================================
 *                     PRIVATE FUNCTIONS                                       */
@@ -68,6 +74,15 @@
     **/
     var setTime = function() {
       remTime = (PomTimer.mode == "Work") ? POM_TIME * 60 : BREAK_TIME * 60;
+      if(PomTimer.mode == "Work") {
+        remTime = POM_TIME * 60;
+      } else {
+        if(completedPoms == 4){
+          remTime = LONG_BREAK_TIME * 60;
+        } else{
+          remTime = BREAK_TIME * 60;
+        }
+      }
       updateClock();
     };
     /**
@@ -133,9 +148,11 @@
     **/
     PomTimer.end = function() {
       if(PomTimer.mode == "Work"){
+        completedPoms++;
         PomTimer.mode = "Break";
       } else {
         PomTimer.mode = "Work";
+        if(completedPoms == 4) completedPoms = 0;
       }
       PomTimer.ringing = false;
       PomTimer.reset();

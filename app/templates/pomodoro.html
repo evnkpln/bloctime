@@ -6,6 +6,7 @@
       <button class="btn" ng-hide= "pomodoro.pomTimer.ringing" ng-click="pomodoro.pomTimer.toggle()">{{ pomodoro.pomTimer.buttonText}}</button>
       <button class="btn" ng-show="pomodoro.pomTimer.ringing" ng-click= "pomodoro.pomTimer.end()">Stop</button>
       <button class="btn" ng-click="pomodoro.pomTimer.skipTime(60)">Skip 1 minute</button>
+      <button class="btn" ng-click="pomodoro.pomTimer.skipTime(600)">Skip 10 minute</button>
     </div>
   </div
 </section>
