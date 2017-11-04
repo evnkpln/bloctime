@@ -21,11 +21,6 @@
     **/
     var running = false;
     /**
-    * @desc Current mode of the timer. Either "work" or "break"
-    * @type {String}
-    **/
-    var mode = "work";
-    /**
     * @desc Current $interval promise.
     * @type {Promise}
     */
@@ -40,7 +35,7 @@
     * @returns {String}
     */
     var toClock = function(time) {
-      var seconds = time%60;
+      var seconds = Math.abs(time%60);
       var minutes = Math.floor(time/60);
       var buffer = "";
       if (seconds<10) {
@@ -57,20 +52,30 @@
     };
     /**
     * @function tickTime
-    * @desc Decrements timer by 1 or optional input and updates clock.
+    * @desc Decrements timer by 1 or optional input and updates clock. Handles timer ending.
     * @param {Number} time Optional. Default 1.
     **/
     var tickTime = function({ time = 1 }) {
       remTime -= time;
       updateClock();
+      if(remTime <= 0 && !PomTimer.ringing) {
+        ringTimer();
+      }
     };
     /**
     * @function setTime
     * @desc Sets the timer based on current paramaters.
     **/
     var setTime = function() {
-      remTime = (mode == "work") ? POM_TIME * 60 : BREAK_TIME * 60;
+      remTime = (PomTimer.mode == "Work") ? POM_TIME * 60 : BREAK_TIME * 60;
       updateClock();
+    };
+    /**
+    * @function ringTimer
+    * @desc Ends timer. TODO: Make timer ring.
+    **/
+    var ringTimer = function() {
+      PomTimer.ringing = true;
     };
 /* =========================================================================
 *                           PUBLIC VARIABLES                              */
@@ -84,6 +89,16 @@
     * @type {String}
     */
     PomTimer.buttonText = "Start";
+    /**
+    * @desc Current mode of the timer. Either "work" or "break"
+    * @type {String}
+    **/
+    PomTimer.mode = "Work";
+    /**
+    * @desc True if timer is ringing.
+    * @type {Boolean}
+    **/
+    PomTimer.ringing = false;
 /* =========================================================================
 *                           PUBLIC METHODS                                */
     /**
@@ -113,6 +128,19 @@
       setTime();
     };
     /**
+    * @function end
+    * @desc Ends the timer and sets up a new one.
+    **/
+    PomTimer.end = function() {
+      if(PomTimer.mode == "Work"){
+        PomTimer.mode = "Break";
+      } else {
+        PomTimer.mode = "Work";
+      }
+      PomTimer.ringing = false;
+      PomTimer.reset();
+    };
+    /**
     * @function skipTime
     * @desc FOR TESTING. Skips time by specified time in seconds.
     * @param {Number} time
@@ -120,11 +148,6 @@
     PomTimer.skipTime = function (time) {
       tickTime({ time });
     };
-    /**
-    * @function buttonText
-    * @desc Returns appropriate string for start button.
-    * @returns {String}
-    **/
     return PomTimer;
   }
 
