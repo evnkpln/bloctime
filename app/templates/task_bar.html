@@ -2,4 +2,7 @@
   <h2> Tasks </h2>
   <input type="text" ng-model="task_bar.val" name="task-name">
   <button ng-click="task_bar.addTask(task_bar.val)">New Task</button>
+  <div class="task" ng-repeat="task in task_bar.tasks | orderBy: '-completedAt'">
+    <h5>{{ task.name }}</h5>
+  </div>
 </section>

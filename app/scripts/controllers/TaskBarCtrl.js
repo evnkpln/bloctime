@@ -1,8 +1,9 @@
 (function() {
     function TaskBarCtrl(Tasks) {
       this.val = 'Task Name';
-      this .addTask = function(newTask){
-        Tasks.addTask({name: newTask});
+      this.tasks = Tasks.all;
+      this.addTask = function(newTask){
+        Tasks.addTask({name: newTask, completed: true, completedAt: Date.now()});
       };
     }
 
