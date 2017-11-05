@@ -31,6 +31,14 @@
     * @type {Number}
     **/
     var completedPoms = 0;
+    /**
+    * @desc Ding sound.
+    * @type {Buzz Object}
+    **/
+    var ding = new buzz.sound( "../../assets/sounds/ding.mp3", {
+      preload: true,
+      loop: true
+    });
 
 /* =========================================================================
 *                     PRIVATE FUNCTIONS                                       */
@@ -87,10 +95,11 @@
     };
     /**
     * @function ringTimer
-    * @desc Ends timer. TODO: Make timer ring.
+    * @desc Makes timer ring until stopped.
     **/
     var ringTimer = function() {
       PomTimer.ringing = true;
+      ding.play();
     };
 /* =========================================================================
 *                           PUBLIC VARIABLES                              */
@@ -154,6 +163,7 @@
         PomTimer.mode = "Work";
         if(completedPoms == 4) completedPoms = 0;
       }
+      ding.stop();
       PomTimer.ringing = false;
       PomTimer.reset();
     };
